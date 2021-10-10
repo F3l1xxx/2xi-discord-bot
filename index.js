@@ -78,7 +78,7 @@ client.on('interactionCreate', async (interaction) => {
                         ]),
                 );
 
-            interaction.channel.send(
+            await interaction.channel.send(
                 {
                     embeds: [new MessageEmbed()
                         .setDescription('Wähle deine Klasse aus!')
@@ -86,12 +86,12 @@ client.on('interactionCreate', async (interaction) => {
                     components: [selectMenu]
                 });
 
-            interaction.reply({ content: 'Du hast erfolgreich eine Klassenauswahl erstellt. Um sie zu Löschen, lösche einfach die Nachricht des Bots.', ephemeral: true });
+            await interaction.reply({ content: 'Du hast erfolgreich eine Klassenauswahl erstellt. Um sie zu Löschen, lösche einfach die Nachricht des Bots.', ephemeral: true });
 
         } catch (err) {
             const date = new Date();
             console.error(`${date.toLocaleDateString()}, ${date.toLocaleTimeString()}:`, err);
-            if (!interaction.replied) interaction.reply({ content: 'Beim Senden der Auswahl-Nachricht ist ein Fehler aufgetreten. Bitte stelle sicher, dass der Bot entsprechende Rechte hat.', ephemeral: true })
+            interaction[interaction.replied ? 'followUp' : 'reply']({ ephemeral: true, content: 'Beim Senden der Auswahl-Nachricht ist ein Fehler aufgetreten. Bitte stelle sicher, dass der Bot entsprechende Rechte hat.'})
         }
     } else if (interaction.isSelectMenu()) {
         const { user, member, customId, component, guild } = interaction;
